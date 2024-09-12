@@ -1,0 +1,31 @@
+<%- include ('partials/head.ejs') %>
+<%- include ('partials/navbar.ejs') %>
+<div class="container container-fluid pt-4">
+  <h1>Clientes</h1>
+  <hr class="linha-divisoria">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Nome</td>
+        <th scope="col">CPF</td>
+        <th scope="col">Endereço</td>
+      </tr>
+    </thead>
+    <tbody>
+      <% listaClientes.forEach((cliente) => { %>
+        <tr>
+          <td>
+            <%= cliente.nome %>
+          </td>
+          <td>
+            <%= cliente.cpf %>
+          </td>
+          <td>
+            <%= cliente.endereco %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<%- include ('partials/footer.ejs') %>

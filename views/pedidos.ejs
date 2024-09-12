@@ -1,0 +1,23 @@
+<%- include ('partials/head.ejs') %>
+<%- include ('partials/navbar.ejs') %>
+<div class="container container-fluid pt-4">
+  <h1>Pedidos</h1>
+  <hr class="linha-divisoria">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Número Pedido</th>
+        <th scope="col">Valor</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% listaPedidos.forEach((pedido) => { %>
+        <tr>
+          <th scope="row"><%= pedido.numeroPedido %></th>
+          <td>R$<%= pedido.valor %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<%- include ('partials/footer.ejs') %>

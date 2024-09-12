@@ -1,0 +1,23 @@
+<h3 class="mt-5">Outros Produtos</h3>
+<hr>
+    <div class="row content-cards">
+      <% listaProdutos.forEach((produto) =>{ %>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+          <div class="card card-product">
+            <img
+              src="<%= produto.imagem %>"
+              alt="<%= produto.nome %>"
+              class="card-img-top img-fluid img-card"
+            />
+            <div class="card-body">
+              <h5 class="card-title fs-6"><%= produto.nome %></h5>
+              <div class="itens-card">
+                <span class="card-text fw-bold">R$<%= produto.preco %></span>
+                <span class="card-text"><%= produto.categoria %></span>
+              </div>
+              <a href="/produtos/<%= produto.id %>" class="btn botao botao-card">Ver Mais</a>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
