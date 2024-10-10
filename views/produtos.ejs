@@ -4,6 +4,74 @@
   <% if (!produto) { %>
   <h1>Produtos</h1>
   <hr class="linha-divisoria">
+  <div class="card">
+    <div class="card-header">
+      <h1>Cadastrar Produto</h1>
+    </div>
+
+    <div class="card-body">
+      <form action="/produtos/new" method="post" enctype="multipart/form-data">
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm"
+            >Imagem</span
+          >
+          <input
+            type="file"
+            class="form-control"
+            name="imagem"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm"
+            required
+          />
+        </div>
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm"
+            >Nome do Produto</span
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="nome"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm"
+            required
+          />
+        </div>
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm"
+            >Preço</span
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="preco"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm"
+            required
+          />
+        </div>
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm"
+            >categoria</span
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="categoria"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm"
+            required
+          />
+        </div>
+        <input
+          type="submit"
+          class="btn btn-outline-success"
+          value="Cadastrar"
+        />
+      </form>
+      <hr />
+    </div>
+  </div>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -14,7 +82,7 @@
       </tr>
     </thead>
     <tbody>
-      <% listaProdutos.forEach((produto) => { %>
+      <% produtos.forEach((produto) => { %>
       <tr>
         <td>
           <img src="<%= produto.imagem %>" alt="<%= produto.nome %>" width="50px">
@@ -24,12 +92,15 @@
         </td>
         <td>R$<%= produto.preco %></td>
         <td><%= produto.categoria %></td>
+        <td><a href="/produtos/edit/<%= produto.id %>" class="btn btn-outline-primary" >Editar</a></td>
+        <td><a href="/produtos/delete/<%= produto.id %>" class="btn btn-outline-danger" onclick="return confirm('Deseja realmente deletar o produto <%= produto.nome %>?')">Deletar</a></td>
       </tr>
       <% }) %>
     </tbody>
   </table>
   <% }else{%>
   <div class="container pt-4">
+
     <div class="row d-flex flex-column flex-md-row pb-5">
       <div class="col col-sm-6">
         <img

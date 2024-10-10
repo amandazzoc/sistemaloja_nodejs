@@ -3,6 +3,50 @@
 <div class="container container-fluid pt-4">
   <h1>Pedidos</h1>
   <hr class="linha-divisoria">
+  <div class="container mb-5">
+  <div class="card">
+    <div class="card-header">
+      <h1>Cadastrar Pedido</h1>
+    </div>
+
+    <div class="card-body">
+      <form action="/pedidos/new" method="post">
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm"
+            >Numero do Pedido</span
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="numeroPedido"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm"
+            required
+          />
+        </div>
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm"
+            >Valor</span
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="valor"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm"
+            required
+          />
+        </div>
+        <input
+          type="submit"
+          class="btn btn-outline-success"
+          value="Cadastrar"
+        />
+      </form>
+      <hr />
+    </div>
+  </div>
+</div>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -11,10 +55,13 @@
       </tr>
     </thead>
     <tbody>
-      <% listaPedidos.forEach((pedido) => { %>
+      <% pedidos.forEach((pedido) => { %>
         <tr>
           <th scope="row"><%= pedido.numeroPedido %></th>
           <td>R$<%= pedido.valor %></td>
+          <td><a href="/pedidos/edit/<%= pedido.id %>" class="btn btn-outline-primary" >Editar</a></td>
+          <td><a href="/pedidos/delete/<%= pedido.id %>" class="btn btn-outline-danger" onclick="return confirm('Deseja realmente deletar o pedido <%= pedido.nome %>?')">Deletar</a></td>
+
         </tr>
       <% }) %>
     </tbody>

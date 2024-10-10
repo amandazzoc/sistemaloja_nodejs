@@ -1,7 +1,23 @@
-import { listaPedidos } from "../models/pedido.js";
+import express from "express";
+import Pedido from "../models/pedido.js";
+const router = express.Router();
 
-export const listarPedidos = (req, res) => {
+router.get("/pedidos", function (req, res) {
+  Pedido.findAll().then((pedidos) => {
     res.render("pedidos", {
-        listaPedidos: listaPedidos,
-      });
-}
+      pedidos: pedidos,
+    });
+  });
+});
+
+router.post("/pedidos/new", function(req, res) {
+  const numeroPedido = req.body.numeroPedido;
+  const valor = req.body.valor;
+  Pedido.create({
+    numeroPedido: numeroPedido,
+    valor: valor
+  }).then(()=> {
+    res.redirect("/pedidos");
+  })
+})
+export default router;

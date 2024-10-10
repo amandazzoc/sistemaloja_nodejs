@@ -1,8 +1,16 @@
-export const listaPedidos = [
-    { numeroPedido: 1, valor: 199.9 },
-    { numeroPedido: 2, valor: 26.9 },
-    { numeroPedido: 3, valor: 144.9 },
-    { numeroPedido: 4, valor: 62.8 },
-    { numeroPedido: 5, valor: 34.904 },
-    { numeroPedido: 6, valor: 124.7 },
-  ];
+import { Sequelize } from "sequelize";
+import connection from "../config/sequelize-config.js";
+
+const Pedido =  connection.define("pedidos",{
+  numeroPedido: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  valor: {
+    type: Sequelize.FLOAT,
+    allowNull: false
+  }
+})
+Pedido.sync({force:false})
+
+export default Pedido
