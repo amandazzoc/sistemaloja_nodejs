@@ -26,7 +26,7 @@ Siga os passos abaixo para rodar o projeto localmente.
 1. <b>Clone o repositório:</b>
 ```bash
 git clone https://github.com/amandazzoc/sistemaloja_nodejs.git
-cd sistema-loja
+cd sistemaloja_nodejs
 ```
 2. <b>Instale as dependências:</b>
 ```bash
