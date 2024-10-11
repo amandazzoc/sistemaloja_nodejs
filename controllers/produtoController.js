@@ -88,4 +88,57 @@ router.post("/produtos/new", upload.single("imagem"), async (req, res) => {
   }
 });
 
+router.get("/produtos/delete/:id", (req, res) => {
+  const id = req.params.id
+  Produto.destroy({
+    where:{
+      id: id
+    }
+  }).then(()=> {
+    res.redirect("/produtos")
+  }).catch(err => {
+    console.log(`Erro ao apagar o produto: ${err}`);
+  })
+})
+
+router.get("/produtos/edit/:id", (req, res) => {
+  const id = req.params.id
+  Produto.findByPk(id).then(produto => {
+    res.render("produtosEdit", {
+      produto:produto
+    })
+  })
+})
+
+router.post("/produtos/update", upload.single("imagem"), async (req, res) => {
+  const { id, nome, preco, categoria } = req.body;
+  const imagem = req.file ? `/uploads/${req.file.filename}` : null;
+
+  try {
+    const produto = await Produto.findByPk(id);
+    if (!produto) {
+      return res.status(404).send("Produto não encontrado");
+    }
+
+    await Produto.update(
+      {
+        nome: nome,
+        preco: preco,
+        categoria: categoria,
+        imagem: imagem ? imagem : produto.imagem, // Atualiza a imagem se foi enviada, caso contrário mantém a atual
+      },
+      {
+        where: { id: id },
+      }
+    );
+
+    res.redirect("/produtos");
+  } catch (erro) {
+    console.log("Erro ao editar os dados: " + erro);
+    res.status(500).send("Erro ao editar os dados");
+  }
+});
+
+
+
 export default router;

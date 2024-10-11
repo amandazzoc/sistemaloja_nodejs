@@ -1,0 +1,69 @@
+<%- include ('partials/head.ejs') %>
+<%- include ('partials/navbar.ejs') %>
+<div class="container container-fluid pt-4">
+  <h1>Clientes</h1>
+  <hr class="linha-divisoria">
+  <div class="container mb-5">
+  <div class="card">
+    <div class="card-header">
+      <h1>Editar Cliente</h1>
+    </div>
+
+    <div class="card-body">
+      <form action="/clientes/update" method="post">
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm"
+            >Nome do Cliente</span
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="nome"
+            value= "<%= cliente.nome  %>"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm"
+            required
+          />
+        </div>
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm"
+            >CPF do Cliente</span
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="cpf"
+            value= "<%= cliente.cpf  %>"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm"
+            required
+          />
+        </div>
+        <div class="input-group input-group-sm mb-3">
+          <span class="input-group-text" id="inputGroup-sizing-sm"
+            >Endereço do Cliente</span
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="endereco"
+            value= "<%= cliente.endereco  %>"
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm"
+            required
+          />
+        </div>
+        <input
+          type="submit"
+          class="btn btn-outline-success"
+          value="Editar"
+          onclick="return confirm('Confirma as alterações para o cliente <%= cliente.nome %>?')"
+        />
+        <input type="hidden" name="id" value="<%= cliente.id %>">
+      </form>
+      <hr />
+    </div>
+  </div>
+</div>
+</div>
+<%- include ('partials/footer.ejs') %>
