@@ -2,8 +2,15 @@ nav{
     background-color: pink;
     border-bottom: palevioletred solid 1px;
 }
-
-
+.card-header {
+    background-color: pink !important;
+}
+.card-header h2 {
+    color: rgb(255, 255, 255) ;
+}
+.card-header h1 {
+    color: rgb(255, 255, 255) ;
+}
 .text-nav{
     color: #ffffff !important;
 }
@@ -21,7 +28,7 @@ footer{
     align-items: center;
     justify-content: center;
     position: sticky;
-    bottom: 0;
+    bottom: 0 !important;
 }
 
 footer p{
@@ -31,6 +38,10 @@ footer p{
 
 .linkProduto{
     color: palevioletred;
+}
+
+.link-login{
+    color: palevioletred
 }
 
 .botao{

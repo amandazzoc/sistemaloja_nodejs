@@ -4,10 +4,30 @@ import pedidoController from "./controllers/pedidoController.js";
 import produtoController from "./controllers/produtoController.js";
 import Produto from "./models/produto.js";
 import connection from "./config/sequelize-config.js";
+import UsersController from "./controllers/userController.js";
+import Auth from "./middleware/Auth.js";
+import session from "express-session";
+import flash from "express-flash";
 
 const app = express();
 
 app.use(express.urlencoded({extended:false}))
+app.use((req, res, next) => {
+  res.locals.loggedOut = req.path === "/login" || req.path === "/cadastro";
+  next();
+});
+
+app.use(flash())
+
+// Configurando o express-session
+app.use(session({
+  secret: "lojasecret",
+  cookie: {
+    maxAge: 3600000
+  },
+  saveUninitialized: false,
+  resave: false
+}))
 
 connection
   .authenticate()
@@ -22,7 +42,8 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use("/uploads", express.static("uploads")); // Servir a pasta onde as imagens estão sendo salvas
 
-app.get("/", function (req, res) {
+
+app.get("/", Auth, function (req, res) {
    Produto.findAll()
      .then((produtos) => {
        res.render("index", {
@@ -38,6 +59,7 @@ app.get("/", function (req, res) {
 app.use("/", produtoController);
 app.use("/", clienteController);
 app.use("/", pedidoController);
+app.use("/", UsersController);
 
 app.listen(8080, (error) => {
   if (error) {
@@ -45,9 +67,4 @@ app.listen(8080, (error) => {
   } else {
     console.log("Servidor iniciado com sucesso!");
   }
-});
-
-// ROTA PRINCIPAL
-app.get("/", function (req, res) {
-  res.render("index");
 });

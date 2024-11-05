@@ -2,6 +2,7 @@ import express from "express";
 import Produto from "../models/produto.js";
 import multer from "multer";
 import path from "path";
+import Auth from "../middleware/Auth.js";
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Rota para listar todos os produtos ou um produto específico
-router.get("/produtos", async (req, res) => {
+router.get("/produtos", Auth, async (req, res) => {
   try {
     const produtos = await Produto.findAll(); // Buscando todos os produtos
     const produtoId = req.query.id; // Obtendo o ID da query string
@@ -49,7 +50,7 @@ router.get("/produtos", async (req, res) => {
 });
 
 // Rota para visualizar um produto específico
-router.get("/produtos/:id", async (req, res) => {
+router.get("/produtos/:id", Auth, async (req, res) => {
   try {
     const produtoId = req.params.id; // Obtendo o ID da URL
     const produto = await Produto.findByPk(produtoId); // Método para buscar produto pelo ID
@@ -70,74 +71,86 @@ router.get("/produtos/:id", async (req, res) => {
 });
 
 // Rota para cadastro de produto com imagem
-router.post("/produtos/new", upload.single("imagem"), async (req, res) => {
-  const { nome, preco, categoria } = req.body;
-  const imagem = req.file ? req.file.filename : null; // Nome do arquivo salvo
+router.post(
+  "/produtos/new",
+  Auth,
+  upload.single("imagem"),
+  async (req, res) => {
+    const { nome, preco, categoria } = req.body;
+    const imagem = req.file ? req.file.filename : null; // Nome do arquivo salvo
 
-  try {
-    await Produto.create({
-      nome,
-      preco,
-      categoria,
-      imagem: `/uploads/${imagem}`, // Caminho da imagem no servidor
-    });
-    res.redirect("/produtos");
-  } catch (erro) {
-    console.log(erro);
-    res.status(500).send("Erro ao cadastrar produto");
+    try {
+      await Produto.create({
+        nome,
+        preco,
+        categoria,
+        imagem: `/uploads/${imagem}`, // Caminho da imagem no servidor
+      });
+      res.redirect("/produtos");
+    } catch (erro) {
+      console.log(erro);
+      res.status(500).send("Erro ao cadastrar produto");
+    }
   }
-});
+);
 
-router.get("/produtos/delete/:id", (req, res) => {
-  const id = req.params.id
+router.get("/produtos/delete/:id", Auth, (req, res) => {
+  const id = req.params.id;
   Produto.destroy({
-    where:{
-      id: id
-    }
-  }).then(()=> {
-    res.redirect("/produtos")
-  }).catch(err => {
-    console.log(`Erro ao apagar o produto: ${err}`);
+    where: {
+      id: id,
+    },
   })
-})
-
-router.get("/produtos/edit/:id", (req, res) => {
-  const id = req.params.id
-  Produto.findByPk(id).then(produto => {
-    res.render("produtosEdit", {
-      produto:produto
+    .then(() => {
+      res.redirect("/produtos");
     })
-  })
-})
-
-router.post("/produtos/update", upload.single("imagem"), async (req, res) => {
-  const { id, nome, preco, categoria } = req.body;
-  const imagem = req.file ? `/uploads/${req.file.filename}` : null;
-
-  try {
-    const produto = await Produto.findByPk(id);
-    if (!produto) {
-      return res.status(404).send("Produto não encontrado");
-    }
-
-    await Produto.update(
-      {
-        nome: nome,
-        preco: preco,
-        categoria: categoria,
-        imagem: imagem ? imagem : produto.imagem, // Atualiza a imagem se foi enviada, caso contrário mantém a atual
-      },
-      {
-        where: { id: id },
-      }
-    );
-
-    res.redirect("/produtos");
-  } catch (erro) {
-    console.log("Erro ao editar os dados: " + erro);
-    res.status(500).send("Erro ao editar os dados");
-  }
+    .catch((err) => {
+      console.log(`Erro ao apagar o produto: ${err}`);
+    });
 });
+
+router.get("/produtos/edit/:id", Auth, (req, res) => {
+  const id = req.params.id;
+  Produto.findByPk(id).then((produto) => {
+    res.render("produtosEdit", {
+      produto: produto,
+    });
+  });
+});
+
+router.post(
+  "/produtos/update",
+  Auth,
+  upload.single("imagem"),
+  async (req, res) => {
+    const { id, nome, preco, categoria } = req.body;
+    const imagem = req.file ? `/uploads/${req.file.filename}` : null;
+
+    try {
+      const produto = await Produto.findByPk(id);
+      if (!produto) {
+        return res.status(404).send("Produto não encontrado");
+      }
+
+      await Produto.update(
+        {
+          nome: nome,
+          preco: preco,
+          categoria: categoria,
+          imagem: imagem ? imagem : produto.imagem, // Atualiza a imagem se foi enviada, caso contrário mantém a atual
+        },
+        {
+          where: { id: id },
+        }
+      );
+
+      res.redirect("/produtos");
+    } catch (erro) {
+      console.log("Erro ao editar os dados: " + erro);
+      res.status(500).send("Erro ao editar os dados");
+    }
+  }
+);
 
 
 
