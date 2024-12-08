@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+import { Sequelize } from "sequelize"; 
 import connection from "../config/sequelize-config.js";
 
 const User = connection.define("users", {
